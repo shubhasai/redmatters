@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:icon="@drawable/ic_emergency"
+        android:iconTint="@color/blue"
+        android:id="@+id/emergencyFragment"
+        android:title="Emergency" />
+    <item android:icon="@drawable/ic_blood"
+        android:iconTint="@color/red"
+        android:id="@+id/bloodFragment"
+        android:title="Blood Donation" />
+    <item android:icon="@drawable/ic_profile"
+        android:iconTint="@color/blue"
+        android:id="@+id/profileFragment"
+        android:title="Profile" />
+</menu>

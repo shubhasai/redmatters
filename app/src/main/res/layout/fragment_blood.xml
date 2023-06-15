@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".BloodFragment">
+    <com.google.android.gms.maps.MapView
+        android:id="@+id/ambulancemapview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:apiKey="AIzaSyByTCobrMtDrYD_1mTesxT2YxPl3l5orDY"
+        android:clickable="true"
+        android:focusable="true"
+        android:enabled="true"
+        android:layout_margin="8dp"
+        mapType="normal" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:layout_height="wrap_content">
+        <TextView
+            android:textStyle="bold"
+            android:textSize="20sp"
+            android:layout_marginTop="20sp"
+            android:layout_marginHorizontal="20dp"
+            android:layout_width="wrap_content"
+            android:text="You don't need a reason to help People "
+            android:layout_height="wrap_content"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginStart="20dp"
+            android:text="People You can help by Donating Blood"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/floatingActionButton2"
+        android:layout_width="match_parent"
+        android:layout_margin="20dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|start"
+        android:clickable="true"
+        android:src="@drawable/ic_location"/>
+
+</FrameLayout>

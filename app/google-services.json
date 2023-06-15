@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "505095174124",
+    "project_id": "redmatters-69940",
+    "storage_bucket": "redmatters-69940.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:505095174124:android:314a898302dcdc30edb2c9",
+        "android_client_info": {
+          "package_name": "com.shubhasai.redmatters"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "505095174124-lrgodmf6pdl9vke2eiemlguaqngfjfk8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBQXPnG9YsyGB9bja41VZlM_W5DPw3Ijgg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "505095174124-lrgodmf6pdl9vke2eiemlguaqngfjfk8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
