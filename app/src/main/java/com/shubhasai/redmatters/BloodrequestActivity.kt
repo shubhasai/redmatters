@@ -18,6 +18,7 @@ import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
 import io.appwrite.Client
+import io.appwrite.ID
 import io.appwrite.exceptions.AppwriteException
 import io.appwrite.services.Account
 import io.appwrite.services.Databases
@@ -72,7 +73,7 @@ class BloodrequestActivity : AppCompatActivity() {
                         getNewLocation()
 
                     } else {
-                        sendalert(location)
+                        readUserDetails(location)
                     }
 
 
@@ -128,13 +129,12 @@ class BloodrequestActivity : AppCompatActivity() {
         override fun onLocationResult(p0: LocationResult) {
             val lastLocation : Location? = p0.lastLocation
             if (lastLocation != null) {
-                Toast.makeText(this@BloodrequestActivity,lastLocation.latitude.toString(), Toast.LENGTH_SHORT).show()
-                sendalert(lastLocation)
+                readUserDetails(lastLocation)
 
             }
         }
     }
-    fun sendalert(location: Location){
+    fun sendalert1(location: Location,bloodgroup:String){
         val currentDate = Date()
 
 // Format the date and time
@@ -143,7 +143,6 @@ class BloodrequestActivity : AppCompatActivity() {
 
         val formattedDate = dateFormat.format(currentDate)
         val formattedTime = timeFormat.format(currentDate)
-        readUserDetails()
         val alert = BloodData(
             bloodGroup = bloodgroup,
             time = formattedTime,
@@ -162,16 +161,23 @@ class BloodrequestActivity : AppCompatActivity() {
                     .setSelfSigned(true)
             } // Your project ID
             val databases = client?.let { Databases(it) }
-            val response = databases?.createDocument(
-                databaseId = "6489bab012b10cbebe23",
-                collectionId = "648a88828daa95f764d5",
-                documentId = Userinfo.userid,
-                data = alert
-            )
-            Toast.makeText(this@BloodrequestActivity,"Alert Has Been Sent",Toast.LENGTH_SHORT).show()
+            val response = try {
+                databases?.createDocument(
+                    databaseId = "6489bab012b10cbebe23",
+                    collectionId = "648a88828daa95f764d5",
+                    documentId = ID.unique(),
+                    data = alert
+                ).apply {
+                    withContext(Dispatchers.IO){
+                        Toast.makeText(this@BloodrequestActivity,"Alert Has Been Sent",Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }catch (e:AppwriteException){
+                println("error in send"+e.message)
+            }
         }
     }
-    fun readUserDetails(){
+    fun readUserDetails(location: Location){
         GlobalScope.launch(Dispatchers.IO){
             val client = this@BloodrequestActivity?.let {
                 Client(it)
@@ -206,10 +212,11 @@ class BloodrequestActivity : AppCompatActivity() {
                     )
                     withContext(Dispatchers.Main){
                         bloodgroup = userDetails.bloodgroup
+                        sendalert1(location, userDetails.bloodgroup)
                     }
                 }
             }catch (e:AppwriteException){
-
+                println("error"+e.message)
             }
         }
 

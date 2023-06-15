@@ -22,11 +22,11 @@ class RedmattersWidget : AppWidgetProvider() {
 
             // Set the click listener on the widget
             widgetViews.setOnClickPendingIntent(R.id.btn_sendalert, pendingIntent)
-            val intent2 = Intent(context, BloodrequestActivity::class.java)
-            val pendingIntent2 = PendingIntent.getActivity(context, 0, intent2, PendingIntent.FLAG_IMMUTABLE)
-
-            // Set the click listener on the widget
-            widgetViews.setOnClickPendingIntent(R.id.btn_sendblood, pendingIntent2)
+//            val intent2 = Intent(context, BloodrequestActivity::class.java)
+//            val pendingIntent2 = PendingIntent.getActivity(context, 0, intent2, PendingIntent.FLAG_IMMUTABLE)
+//
+//            // Set the click listener on the widget
+//            widgetViews.setOnClickPendingIntent(R.id.btn_sendblood, pendingIntent2)
 
             // Update the widget views
             appWidgetManager.updateAppWidget(appWidgetId, widgetViews)
