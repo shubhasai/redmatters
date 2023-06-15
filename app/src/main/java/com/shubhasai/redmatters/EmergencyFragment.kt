@@ -193,7 +193,7 @@ class EmergencyFragment : Fragment() {
                                         .center(userLatLng)
                                         .radius(5.0*1000)
                                         .fillColor(com.shubhasai.redmatters.R.color.royal_blue)
-                                    val originalBitmap = BitmapFactory.decodeResource(resources, com.shubhasai.redmatters.R.drawable.ic_person)
+                                    val originalBitmap = BitmapFactory.decodeResource(resources, com.shubhasai.redmatters.R.drawable.emericon)
 
 // Define the desired width and height of the resized bitmap
                                     val width = 80

@@ -188,7 +188,7 @@ class BloodFragment : Fragment() {
                                 mapView.onResume()
                                 mapView.getMapAsync { googleMap ->
                                     // Initialize the Google Map object
-                                    val originalBitmap = BitmapFactory.decodeResource(resources, com.shubhasai.redmatters.R.drawable.ic_person)
+                                    val originalBitmap = BitmapFactory.decodeResource(resources, com.shubhasai.redmatters.R.drawable.emericon)
 
 // Define the desired width and height of the resized bitmap
                                     val width = 80
