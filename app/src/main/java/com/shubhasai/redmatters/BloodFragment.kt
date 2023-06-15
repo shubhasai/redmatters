@@ -2,9 +2,13 @@ package com.shubhasai.redmatters
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.location.Location
 import android.location.LocationManager
+import android.net.Uri
 import android.os.Bundle
 import android.os.Looper
 import android.util.Log
@@ -12,6 +16,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -20,10 +26,12 @@ import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.CircleOptions
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MapStyleOptions
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.shubhasai.redmatters.databinding.FragmentBloodBinding
 import io.appwrite.Client
 import io.appwrite.exceptions.AppwriteException
@@ -38,6 +46,7 @@ class BloodFragment : Fragment() {
     private  lateinit var locationRequest: LocationRequest
     private  val pERMISSION_CODE = 100
     private lateinit var binding:FragmentBloodBinding
+    var contact = ""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -54,6 +63,7 @@ class BloodFragment : Fragment() {
                 it
             )
         }!!
+        getLastLocation()
         binding.floatingActionButton2.setOnClickListener {
             // Check if location permission is granted
             getLastLocation()
@@ -160,12 +170,12 @@ class BloodFragment : Fragment() {
                         val eMap = doc.data
                         val emergencyDetails = BloodData(
                             bloodGroup = eMap["bloodGroup"] as String,
-                            date = eMap["userid"] as String,
-                            time = eMap["userid"] as String,
-                            latitude = eMap["userid"] as String,
-                            longitude = eMap["userid"] as String,
-                            pid = eMap["userid"] as String,
-                            text = eMap["userid"] as String,
+                            date = eMap["date"] as String,
+                            time = eMap["time"] as String,
+                            latitude = eMap["latitude"] as String,
+                            longitude = eMap["longitude"] as String,
+                            pid = eMap["pid"] as String,
+                            text = eMap["text"] as String,
                         )
                         emergencylist.add(emergencyDetails)
                     }
@@ -178,6 +188,17 @@ class BloodFragment : Fragment() {
                                 mapView.onResume()
                                 mapView.getMapAsync { googleMap ->
                                     // Initialize the Google Map object
+                                    val originalBitmap = BitmapFactory.decodeResource(resources, com.shubhasai.redmatters.R.drawable.ic_person)
+
+// Define the desired width and height of the resized bitmap
+                                    val width = 80
+                                    val height = 80
+
+// Create a new bitmap with the desired width and height
+                                    val resizedBitmap = Bitmap.createScaledBitmap(originalBitmap, width, height, false)
+
+// Create a BitmapDescriptor from the resized bitmap
+                                    val bitmapDescriptor = BitmapDescriptorFactory.fromBitmap(resizedBitmap)
                                     val placeLatLng = LatLng(emergency.latitude.toDouble(), emergency.longitude.toDouble())
                                     val userLatLng = LatLng(loca.latitude, loca.longitude)
                                     val circleOptions = CircleOptions()
@@ -186,6 +207,7 @@ class BloodFragment : Fragment() {
                                         .fillColor(R.color.royal_blue)
                                     val markerOptions = MarkerOptions()
                                         .position(placeLatLng)
+                                        .icon(bitmapDescriptor)
                                         .title(emergency.pid.toString())
                                     googleMap.addMarker(markerOptions)
                                     googleMap.addCircle(circleOptions)
@@ -193,6 +215,24 @@ class BloodFragment : Fragment() {
                                         MapStyleOptions.loadRawResourceStyle(
                                             it, R.raw.map_style)
                                     })
+                                    googleMap.setOnMarkerClickListener {marker->
+                                        val dialog = activity?.let { BottomSheetDialog(it) }
+                                        dialog?.setContentView(com.shubhasai.redmatters.R.layout.emergencydrawer)
+                                        val name = dialog?.findViewById<TextView>(com.shubhasai.redmatters.R.id.tvname)
+                                        val text = dialog?.findViewById<TextView>(com.shubhasai.redmatters.R.id.tvtext)
+                                        val call = dialog?.findViewById<ImageView>(com.shubhasai.redmatters.R.id.btnCall)
+                                        name?.text = emergency.pid
+                                        text?.text = emergency.bloodGroup
+                                        readUserDetails(emergency.pid)
+
+                                        call?.setOnClickListener{
+                                            val phoneNumber = "tel:${contact}"
+                                            val dialerIntent = Intent(Intent.ACTION_DIAL, Uri.parse(phoneNumber))
+                                            startActivity(dialerIntent)
+                                        }
+                                        dialog?.show()
+                                        true
+                                    }
                                     googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(placeLatLng, 15f))
                                 }
                             }
@@ -220,5 +260,50 @@ class BloodFragment : Fragment() {
 
     fun deg2rad(deg: Double): Double {
         return deg * (Math.PI /180)
+    }
+    fun readUserDetails(id:String){
+        GlobalScope.launch(Dispatchers.IO) {
+            val client = activity?.let {
+                Client(it)
+                    .setEndpoint("https://cloud.appwrite.io/v1") // Your API Endpoint
+                    .setProject("6489b94aebd49e04665a")
+            } // Your project ID
+
+            val databases = client?.let { Databases(it) }
+
+            val response = try{
+                databases?.getDocument(
+                    databaseId = "6489bab012b10cbebe23",
+                    collectionId = "648a09afde0d4bfbde7b",
+                    documentId = id,
+                )?.apply {
+                    val userMap = data
+                    val userDetails = userdetails(
+                        userid = userMap["userid"] as String,
+                        name = userMap["name"] as String,
+                        email = userMap["email"] as String,
+                        phone = userMap["phone"] as String,
+                        gender = userMap["gender"] as String,
+                        dob = userMap["dob"] as String,
+                        emergencyNumber = userMap["emergencyNumber"] as String,
+                        redcoins = (userMap["redcoins"] as Double).toInt(),
+                        state = userMap["state"] as String,
+                        district = userMap["district"] as String,
+                        locality = userMap["locality"] as String,
+                        pincode = userMap["pincode"] as String,
+                        height = userMap["height"] as String,
+                        weight = userMap["weight"] as String,
+                        bloodgroup = userMap["bloodgroup"] as String,
+                        birthmark = userMap["birthmark"] as String
+                    )
+                    withContext(Dispatchers.Main){
+                        contact = userDetails.phone
+                    }
+                }
+            } catch (e:AppwriteException){
+
+            }
+        }
+
     }
 }

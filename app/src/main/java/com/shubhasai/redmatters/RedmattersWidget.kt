@@ -17,16 +17,19 @@ class RedmattersWidget : AppWidgetProvider() {
         val widgetViews = RemoteViews(context.packageName, R.layout.redmatters_widget)
         for (appWidgetId in appWidgetIds) {
             updateAppWidget(context, appWidgetManager, appWidgetId)
-            val intent = Intent(context, BloodrequestActivity::class.java)
+            val intent = Intent(context, SendemergencyActivity::class.java)
             val pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_IMMUTABLE)
 
             // Set the click listener on the widget
             widgetViews.setOnClickPendingIntent(R.id.btn_sendalert, pendingIntent)
-            val intent2 = Intent(context, SendemergencyActivity::class.java)
+            val intent2 = Intent(context, BloodrequestActivity::class.java)
             val pendingIntent2 = PendingIntent.getActivity(context, 0, intent2, PendingIntent.FLAG_IMMUTABLE)
 
             // Set the click listener on the widget
-            widgetViews.setOnClickPendingIntent(R.id.btn_sendalert, pendingIntent2)
+            widgetViews.setOnClickPendingIntent(R.id.btn_sendblood, pendingIntent2)
+
+            // Update the widget views
+            appWidgetManager.updateAppWidget(appWidgetId, widgetViews)
         }
     }
 

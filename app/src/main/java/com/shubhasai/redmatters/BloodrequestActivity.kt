@@ -48,8 +48,7 @@ class BloodrequestActivity : AppCompatActivity() {
             val r = try{
                 account.getSession("current").apply {
                     userid = this.userId
-                    startActivity(Intent(this@BloodrequestActivity, MainActivity::class.java))
-                    finish()
+                    getLastLocation()
                 }
             }
             catch (e: AppwriteException){
@@ -169,6 +168,7 @@ class BloodrequestActivity : AppCompatActivity() {
                 documentId = Userinfo.userid,
                 data = alert
             )
+            Toast.makeText(this@BloodrequestActivity,"Alert Has Been Sent",Toast.LENGTH_SHORT).show()
         }
     }
     fun readUserDetails(){

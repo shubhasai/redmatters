@@ -37,6 +37,7 @@ class SendemergencyActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sendemergency)
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
         val client = Client(this)
             .setEndpoint("https://cloud.appwrite.io/v1") // Your API Endpoint
             .setProject("6489b94aebd49e04665a")
@@ -47,8 +48,7 @@ class SendemergencyActivity : AppCompatActivity() {
             val r = try{
                 account.getSession("current").apply {
                     userid = this.userId
-                    startActivity(Intent(this@SendemergencyActivity, MainActivity::class.java))
-                    finish()
+                    getLastLocation()
                 }
             }
             catch (e: AppwriteException){
@@ -56,8 +56,7 @@ class SendemergencyActivity : AppCompatActivity() {
             }
 
         }
-        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
-        getLastLocation()
+
     }
     @SuppressLint("MissingPermission")
     private fun getLastLocation(){
@@ -138,7 +137,7 @@ class SendemergencyActivity : AppCompatActivity() {
     }
     fun sendalert(location:Location){
         val currentDate = Date()
-
+        Toast.makeText(this@SendemergencyActivity,"Alert Has Been Sent",Toast.LENGTH_SHORT).show()
 // Format the date and time
         val dateFormat = SimpleDateFormat("yyyy-MM-dd")
         val timeFormat = SimpleDateFormat("HH:mm:ss")
@@ -162,12 +161,17 @@ class SendemergencyActivity : AppCompatActivity() {
                     .setSelfSigned(true)
             } // Your project ID
             val databases = client?.let { Databases(it) }
-            val response = databases?.createDocument(
-                databaseId = "6489bab012b10cbebe23",
-                collectionId = "648a239ba491c0936c62",
-                documentId = ID.unique(),
-                data = alert
-            )
+            val response = try{
+                databases?.createDocument(
+                    databaseId = "6489bab012b10cbebe23",
+                    collectionId = "648a239ba491c0936c62",
+                    documentId = ID.unique(),
+                    data = alert
+                )
+            }catch (e:AppwriteException){
+                println(e.message)
+            }
+
         }
     }
 }
