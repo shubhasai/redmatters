@@ -52,11 +52,23 @@ class ProfileFragment : Fragment() {
         val gender = binding.etGender.text.toString().lowercase()
         val dob = binding.etDob.text.toString()
         val hashMap:HashMap<String,Any> = HashMap()
-        val userdetails = userdetails(name = name,
-            email = email,
-            phone = Contact,gender = gender, dob = dob, emergencyNumber = emergencyContact,
-            state=state,district=district, locality = locality,pincode = pincode,
-            userid = Userinfo.userid,height= height, weight = weight, bloodgroup = bloodGroup, birthmark = birthmark)
+        val userdetailsMap = HashMap<String, Any>().apply {
+            put("name", name)
+            put("email", email)
+            put("phone", Contact)
+            put("gender", gender)
+            put("dob", dob)
+            put("emergencyNumber", emergencyContact)
+            put("state", state)
+            put("district", district)
+            put("locality", locality)
+            put("pincode", pincode)
+            put("userid", Userinfo.userid)
+            put("height", height)
+            put("weight", weight)
+            put("bloodgroup", bloodGroup)
+            put("birthmark", birthmark)
+        }
         GlobalScope.launch(Dispatchers.IO) {
             val client = activity?.let {
                 Client(it)
@@ -65,14 +77,13 @@ class ProfileFragment : Fragment() {
                     .setSelfSigned(true)
             } // Your project ID
             val databases = client?.let { Databases(it) }
-            val response = databases?.createDocument(
+            val response = databases?.updateDocument(
                 databaseId = "6489bab012b10cbebe23",
                 collectionId = "648a09afde0d4bfbde7b",
                 documentId = Userinfo.userid,
-                data = userdetails
+                data = userdetailsMap
             )
         }
-
 
     }
     fun readUserDetails(){

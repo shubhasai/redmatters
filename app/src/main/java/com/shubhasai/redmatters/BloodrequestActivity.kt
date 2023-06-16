@@ -164,11 +164,11 @@ class BloodrequestActivity : AppCompatActivity() {
             val response = try {
                 databases?.createDocument(
                     databaseId = "6489bab012b10cbebe23",
-                    collectionId = "648a88828daa95f764d5",
+                    collectionId = "648accbe2cf8917934a6",
                     documentId = ID.unique(),
                     data = alert
                 ).apply {
-                    withContext(Dispatchers.IO){
+                    withContext(Dispatchers.Main){
                         Toast.makeText(this@BloodrequestActivity,"Alert Has Been Sent",Toast.LENGTH_SHORT).show()
                     }
                 }

@@ -164,7 +164,7 @@ class BloodFragment : Fragment() {
             val response = try{
                 databases?.listDocuments(
                     databaseId = "6489bab012b10cbebe23",
-                    collectionId = "648a88828daa95f764d5",
+                    collectionId = "648accbe2cf8917934a6",
                 )?.apply {
                     for ( doc in this.documents){
                         val eMap = doc.data
@@ -182,7 +182,7 @@ class BloodFragment : Fragment() {
                     withContext(Dispatchers.Main){
                         for (emergency in emergencylist){
                             val distance = distance(loca.latitude,loca.longitude,emergency.latitude.toDouble(),emergency.longitude.toDouble())
-                            if(distance<100){
+                            if(distance<5){
                                 val mapView = binding.ambulancemapview
                                 mapView.onCreate(null)
                                 mapView.onResume()
@@ -203,7 +203,7 @@ class BloodFragment : Fragment() {
                                     val userLatLng = LatLng(loca.latitude, loca.longitude)
                                     val circleOptions = CircleOptions()
                                         .center(userLatLng)
-                                        .radius(100.0*1000)
+                                        .radius(5.0*1000)
                                         .fillColor(R.color.royal_blue)
                                     val markerOptions = MarkerOptions()
                                         .position(placeLatLng)
@@ -241,7 +241,7 @@ class BloodFragment : Fragment() {
                     }
                 }
             } catch (e: AppwriteException){
-
+                println(e.message)
             }
         }
     }

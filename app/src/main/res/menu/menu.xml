@@ -4,10 +4,10 @@
         android:iconTint="@color/blue"
         android:id="@+id/emergencyFragment"
         android:title="Emergency" />
-<!--    <item android:icon="@drawable/ic_blood"-->
-<!--        android:iconTint="@color/red"-->
-<!--        android:id="@+id/bloodFragment"-->
-<!--        android:title="Blood Donation" />-->
+    <item android:icon="@drawable/ic_blood"
+        android:iconTint="@color/red"
+        android:id="@+id/bloodFragment"
+        android:title="Blood Donation" />
     <item android:icon="@drawable/ic_profile"
         android:iconTint="@color/blue"
         android:id="@+id/profileFragment"

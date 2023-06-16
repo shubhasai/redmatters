@@ -151,7 +151,6 @@ class SendemergencyActivity : AppCompatActivity() {
             longitude = location.longitude.toString(),
             pid = userid,
             text = "Help Needed"
-
         )
         GlobalScope.launch(Dispatchers.IO) {
             val client = this@SendemergencyActivity?.let {

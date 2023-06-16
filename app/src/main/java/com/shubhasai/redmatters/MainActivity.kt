@@ -29,6 +29,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        println("userId"+Userinfo.userid)
         binding.navMenu.setOnItemSelectedListener {
             Log.d("Item",it.itemId.toString())
             NavigationUI.onNavDestinationSelected(it,findNavController(binding.navHostFragment.id))
@@ -61,7 +62,8 @@ class MainActivity : AppCompatActivity() {
                             data = hashmap
                         )
                     }catch (e:AppwriteException){
-                        println(e.message)
+                        println("docid:-"+Userinfo.userid)
+                        println("token error: "+e.message)
                     }
                 }
             }

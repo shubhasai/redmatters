@@ -41,7 +41,6 @@ class LoginActivity : AppCompatActivity() {
             catch (e:AppwriteException){
 
             }
-
         }
         //For Login
         binding.btnLogin.setOnClickListener {
