@@ -182,7 +182,7 @@ class BloodFragment : Fragment() {
                     withContext(Dispatchers.Main){
                         for (emergency in emergencylist){
                             val distance = distance(loca.latitude,loca.longitude,emergency.latitude.toDouble(),emergency.longitude.toDouble())
-                            if(distance<5){
+                            if(distance<50000000){
                                 val mapView = binding.ambulancemapview
                                 mapView.onCreate(null)
                                 mapView.onResume()
